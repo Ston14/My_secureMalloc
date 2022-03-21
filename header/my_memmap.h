@@ -1,5 +1,4 @@
-
-#include <stddef.h>
+#include <stdio.h>
 
 #ifdef __linux__
 #define linux_archi
@@ -27,7 +26,6 @@ bool name_my_memory(void *ptr, size_t size, const char* name);
 
 /*LINUX mremap compatbile :D Permet de remapper une interval d'adresse */
 #ifdef linux_archi
-
 bool my_memraping();
 bool my_memreaping_fixed();
 #endif
