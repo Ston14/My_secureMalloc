@@ -5,10 +5,10 @@ void *my_memomap(size_t size);
 
 //unmap memory
 //segfault si pas bon
-bool my_unmap_mem(void *ptr, size_t size);
+int my_unmap_mem(void *ptr);
 
 //memory purge
-bool my_purge_mem(void *ptr, size_t size);
+bool my_purge_mem(void *ptr);
 
 
 
