@@ -1,9 +1,5 @@
 #include <stdio.h>
 
-#ifdef __linux__
-#define linux_archi
-#endif
-
 //Map la memoire
 void *my_memomap(size_t size);
 
