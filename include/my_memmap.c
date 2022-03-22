@@ -1,6 +1,6 @@
 //TBD
 #include <sys/mman.h>
-//NULL adresse la plus aproprié
+//NULL adresse la plus approprié
 void *my_memomap(size_t size){
     void *return_pointer = mmap(NULL, size, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS|MAP_PRIVATE, 0, 0);
     if(return_pointer == MAP_FAILED){
