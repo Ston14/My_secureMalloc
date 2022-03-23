@@ -1,0 +1,5 @@
+//Contrainte lib statique dynamique
+ajout des log
+contrer les heap overflow (creation de table Hash (controle d'integrité des données)
+/*
+Voir les changements que cela fait au cours du programme*/

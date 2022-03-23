@@ -12,6 +12,7 @@ void* my_malloc(size_t size){
     }
 }
 void my_free(void *ptr){
+    //creation d'un check pour eviter les erreur de free. unmap segfault si ptr==NULL
     size_t length_ptr = check_cache(ptr)
     if(length!=0){
         my_unmap_mem(ptr,length_ptr);
@@ -32,6 +33,7 @@ void* my_realloc(void *ptr, size_t size){
         my_free(ptr);
         return NULL;
     }
+
     size_t length = checkCache(ptr);
     if(length >= size){
         return ptr;

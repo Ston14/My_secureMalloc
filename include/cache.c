@@ -19,14 +19,14 @@ void* insertCache(void* ptr,size_t size){
             //(*cache) pour acceder simplement au tableau car ***
             if((*cache)[i] == NULL){
                 (*cache)[i] = ptr;
-                (*cache)[i+1] = size;
+                (*cache)[i+1] = (void***)size;
                 return ptr;
             }
         }
         //& pour le debut des adresses
         /* on recupere une adresse dans celui ci on recupere le pointeur des pointeurs de mmap
          * */
-        cache = &(*cache)[0];
+        cache = (void***)&(*cache)[0];
     }
     //equivalent de secmalloc_cache = my_memomap(); liaison de la page a un nouvelle page
     *cache = my_memommap(size);
@@ -42,18 +42,21 @@ void* insertCache(void* ptr,size_t size){
 }
 //
 size_t checkCache(void *ptr){
+    //renvoi null si mon ptr n'est pas initialisé
     if(ptr == NULL){
         return NULL;
     }
+    //recuperer ma variable globale
     void** cache = &secmalloc_cache;
+    //tant que mon cache n'est pas egale a la valeur de mon ptr
     while (*cache != ptr){
         for(int i = 1; i<4096;i+=2){
             if(cache[i] == ptr){
                 cache[i] = NULL;
-                return cache[i+1];
+                return (size_t )cache[i+1];
             }
         }
-        cache = cache[0];
+        cache = (void**)cache[0];
     }
     return 0;
 }
