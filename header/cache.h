@@ -5,5 +5,5 @@
 #ifndef MY_SECUREMALLOC_CACHE_H
 #define MY_SECUREMALLOC_CACHE_H
 void* insertCache(void* ptr);
-void removeCache(void* ptr);
+size_t checkCache(void* ptr);
 #endif //MY_SECUREMALLOC_CACHE_H
