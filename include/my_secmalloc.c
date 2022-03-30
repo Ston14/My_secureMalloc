@@ -8,7 +8,9 @@ void* my_malloc(size_t size){
     if(size == 0 ){
         return NULL;
     }else{
-        return insertCache(my_memomap(size),size);
+        void* pointeur = my_memomap(size+1);
+        pointeur[size + 1] = 0xC5;
+        return insertCache(pointeur,size);
     }
 }
 void my_free(void *ptr){
