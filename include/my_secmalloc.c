@@ -15,6 +15,7 @@ void my_free(void *ptr){
     //creation d'un check pour eviter les erreur de free. unmap segfault si ptr==NULL
     size_t length_ptr = check_cache(ptr)
     if(length!=0){
+        //enlever du registre ***
         my_unmap_mem(ptr,length_ptr);
     }else{
         return NULL;
