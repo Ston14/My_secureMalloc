@@ -1,6 +1,7 @@
 
 #include "header/my_secmalloc.h"
 #include "header/my_memmap.h"
+#include <stdint.h>
 //Contrainte lib statique dynamique & log
 
 void* my_malloc(size_t size){
@@ -8,15 +9,25 @@ void* my_malloc(size_t size){
     if(size == 0 ){
         return NULL;
     }else{
-        return insertCache(my_memomap(size),size);
+        /*
+        uint8_t* pointeur = my_memomap(size+1);
+        pointeur[size + 1] = 0xC5;*/
+        return insertCache(pointeur,size);
     }
 }
 void my_free(void *ptr){
     //creation d'un check pour eviter les erreur de free. unmap segfault si ptr==NULL
     size_t length_ptr = check_cache(ptr)
     if(length!=0){
+        //enlever du registre ***
         my_unmap_mem(ptr,length_ptr);
     }else{
+        return NULL;
+    }
+    if (checkCache(ptr)==0) {
+        my_unmap_mem(ptr);
+    }
+    else {
         return NULL;
     }
 }
