@@ -1,35 +1,46 @@
 #include "../header/cache.h"
+#include "../header/memmap.h"
 
-typedef struct my_metadata {
-    void* ptr = NULL;
-    size_t length_data = 0;
-    char canarii = 0xC5;
-    struct my_metadata *next;
+struct my_cache {
+    void* my_address;
+    size_t size;
 };
+struct my_cache* cache = NULL;
+int taille_index = 32;
 
 void* insertCache(void* ptr,size_t size){
-    struct set_malloc_metadata = my_metadata;
     if(ptr == NULL || size == 0){
         return NULL;
     }
-    while (set_malloc_metadata->next != NULL) {
-        set_malloc_metadata = set_malloc_metadata->next;
+    for (int i = 0; i < taille_index; ++i) {
+        if (my_cache[i].my_address == NULL) {
+            my_cache[i].address = ptr;
+            my_cache[i].size = size;
+            return ptr;
+        }
     }
-    set_malloc_metadata->ptr = ptr;
-    set_malloc_metadata->length_data = size;
-    return ptr;
+    //remapp tableau si il n'y a plus de place
+    my_cache = mremap(ptr, sizeof(struct my_cache) * taille_index, sizeof(struct my_cache)taille_index * 2, MREMAP_MAYMOVE);
+    for (int i = taille_index + 1; i < taille_index * 2; i++) {
+        my_cache[i].address = NULL;
+        my_cache[i].size = -1;
+    }
+    my_cache[taille_index].my_address = ptr;
+    my_cache[taille_index].size = size;
+    taille_index = taille_index * 2;
+
 }
 
 size_t checkCache(void *ptr){
-    size_t not_found = 0;
     if(ptr == NULL){
         return NULL;
     }
-    struct check_malloc_metadata = my_me;
-    while (check_malloc_metadata->next != NULL){
-        if (check_malloc_metadata->ptr == ptr) {
-            return check_malloc_metadata->length_data;
+    for (int i = 0; i < taille_index; ++i) {
+        if (my_cache[i].address == ptr) {
+            my_cache[i].address = NULL;
+            my_cache[i].size = -1;
+            return 0;
         }
     }
-    return not_found;
+    return -1;
 }
