@@ -4,3 +4,6 @@
 --library=criterion
 memory_use.txt
 oupsi
+.idea
+.vs
+.vscode
