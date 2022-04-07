@@ -20,7 +20,7 @@ void* insertCache(void* ptr,size_t size){
         }
     }
     //remapp tableau si il n'y a plus de place
-    my_cache = mremap(ptr, sizeof(struct my_cache) * taille_index, sizeof(struct my_cache)taille_index * 2, MREMAP_MAYMOVE);
+    my_cache = mremap(ptr, sizeof(struct my_cache) * taille_index, sizeof(struct my_cache)+(taille_index * 2), MREMAP_MAYMOVE);
     for (int i = taille_index + 1; i < taille_index * 2; i++) {
         my_cache[i].address = NULL;
         my_cache[i].size = -1;
