@@ -4,7 +4,7 @@ CFLAGS = -Werror -Wall -pedantic -std=gnu99 -I./include
 TEST_LDFLAGS= -lcriterion
 
 EXE = secmalloc
-EXE_TEST = oupsi
+EXE_TEST = run
 
 SOURCE = src/cache.c \
          src/my_memmap.c \
