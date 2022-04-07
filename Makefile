@@ -1,27 +1,50 @@
-CC = GCC
+CC = gcc
+
+CFLAGS = -Werror -Wall -pedantic -std=gnu99 -I./include
+TEST_LDFLAGS= -lcriterion
+
 EXE = secmalloc
+EXE_TEST = oupsi
 
-PI = include
-PH = header
-SOURCE += include/cache.c include/my_memmap.c include/my_secmalloc
+SOURCE = src/cache.c \
+         src/my_memmap.c \
+         src/my_secmalloc.c
 
-EXE_TEST = test
-PT = test
+COVERAGE = $(SOURCE:.c=.gcda) \
+           $(SOURCE:.c=.gcno) \
+           $(TEST_SOURCE:.c=.gcno) \
+           $(TEST_SOURCE:.c=.gcda)
 
-.PHONY: all main test clean
-all: main test
 
-test:
-	@echo "test is building"
-	$(CC) -lcriterion test/my_secmalloc_is_working.c $(SOURCE) -o $(PT)/$(ET)
-	@echo "building done"
-	@-./test/my_secmalloc_is_working.c
-main:
-	@echo "main is building"
-	$(CC) -lcriterio test/main.c $(SOURCE) -o $(PT)/$(ET)
-	@echo "building done"
-	@-./test/my_secmalloc_is_working.c
+TEST_SOURCE = ./test/main.c
+
+OBJ=$(SOURCE:.c=.o)
+TEST_OBJ=  $(TEST_SOURCE:.c=.o)
+
+all: static dynamic test
+
+static:	$(OBJ)
+	ar rcs $(EXE).a $(OBJ)
+
+dynamic: $(OBJ)
+	$(CC) -shared -o $(EXE).so $(OBJ)
+
+test: CFLAGS += --coverage
+test: $(TEST_OBJ) $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) $(TEST_OBJ) -o $(EXE_TEST) $(TEST_LDFLAGS)
+	./$(EXE_TEST)
+	gcovr --exclude test
+
 clean:
-	@echo "Clean is building")
-	@rm $(PT)/$(EXE)
-	@echo "je suis une merde"
+	rm -f $(OBJ)
+	rm -f $(COVERAGE)
+
+fclean: clean
+	rm -f $(EXE).so
+	rm -f $(EXE).a
+	rm -f $(TEST_EXE)
+
+re: fclean all
+
+
+.PHONY: all static clean dynamic fclean re test
