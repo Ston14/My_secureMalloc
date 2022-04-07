@@ -1,0 +1,6 @@
+*.o
+*.gcno
+*.gcda
+--library=criterion
+memory_use.txt
+oupsi
